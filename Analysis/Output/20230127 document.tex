@@ -1,0 +1,246 @@
+\documentclass[12 pt,fullpage]{article}
+%\documentclass[draft]{ectaart}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{textcomp}
+\usepackage{ifsym}
+\usepackage{mathrsfs}
+\usepackage{epstopdf}
+\usepackage{MnSymbol}
+\usepackage{multirow}
+\usepackage{epsfig}
+\usepackage[normalem]{ulem}
+\usepackage[round]{natbib}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{placeins}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{tabularx}
+\usepackage{booktabs}
+%\usepackage{xcolor}
+\usepackage{bbm}
+\usepackage[colorlinks,citecolor=blue]{hyperref}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{hyperref}
+\usepackage{comment}
+\usepackage{chngcntr}
+\usepackage{amsmath}
+\usepackage{setspace}
+%\usepackage{colortbl}
+\usepackage[table,xcdraw]{xcolor}
+
+%\usepackage[bottom]{footmisc}
+\usepackage[hang,flushmargin]{footmisc}
+\counterwithout{equation}{section} 
+%\counterwithin{equation}{chapter} 
+%\numberwithin{equation}{section}
+
+\newcommand{\footremember}[2]{%
+	\footnote{#2}
+	\newcounter{#1}
+	\setcounter{#1}{\value{footnote}}%
+}
+\newcommand{\footrecall}[1]{%
+	\footnotemark[\value{#1}]%
+}
+
+\setcounter{MaxMatrixCols}{10}
+
+\linespread{1.5}
+
+
+
+%\topmargin=-1.8cm \textheight=23.8cm \oddsidemargin=-0.3cm
+%\evensidemargin=-0.5cm \textwidth=17.1cm
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\theoremstyle{plain}
+\newtheorem{theo}{Theorem}
+\newtheorem{conj}{Conjecture}
+\newtheorem{prop}{Proposition}
+\newtheorem*{prop*}{Proposition}
+\newtheorem{coro}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{assum}{Assumption}
+\newtheorem{defi}{Definition}
+
+\newtheorem{innercustomgeneric}{\customgenericname}
+\providecommand{\customgenericname}{}
+\newcommand{\newcustomtheorem}[2]{%
+	\newenvironment{#1}[1]
+	{%
+		\renewcommand\customgenericname{#2}%
+		\renewcommand\theinnercustomgeneric{##1}%
+		\innercustomgeneric
+	}
+	{\endinnercustomgeneric}
+}
+
+\newcustomtheorem{customprop}{Proposition}
+\newcustomtheorem{customlemma}{Lemma}
+
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+
+\newcommand{\figtext}[1]{
+	\vspace{-1.9ex}
+	\captionsetup{justification=justified,font=footnotesize}
+	\caption*{\hspace{6pt}\hangindent=1.5em #1}
+}
+\newcommand{\fignote}[1]{\figtext{\emph{Note:~}~#1}}
+
+\newcommand{\figsource}[1]{\figtext{\emph{Source:~}~#1}}
+
+\newcommand{\starnote}{\figtext{* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01. Standard errors in parentheses.}}
+
+\title{\textbf{Assymetric Effects of Corporate Income Taxation}}
+\author{\vspace{-30mm}}
+
+\begin{document}
+	\date{\vspace{-25mm}}
+	\maketitle
+	\vspace{-10mm}
+
+
+
+
+\section{Main Document}
+
+\subsection{Figures}
+\begin{comment}
+
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\textwidth}
+		\includegraphics[width=1\textwidth]{./Figures/Figure_1_BossEmailPersist_A.pdf}
+		\caption{Emails from Workers to Managers}
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[t]{.45\textwidth}
+		\includegraphics[width=1\textwidth]{./Figures/Figure_1_WorkerEmailPersist_B.pdf}
+		\caption{Emails from Workers to Workers}
+	\end{subfigure}
+	\caption{Persistence of Email Connections Between the First and Last Month of the Pre-Period}
+	\centering
+\end{figure}
+\footnotesize Note: This figure displays the share of emails sent in worker-manager dyads or worker-worker dyads in the first 4 weeks of the pre-period and the last 4 weeks of the pre-period. There is a 5 week gap between these periods. For worker-to-worker dyads, we distinguish between email persistence to workers within and outside of the division. Workers do not email managers outside of their own division.
+
+
+\newpage
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[t]{.45\textwidth}
+		\includegraphics[width=1\textwidth]{./Figures/Figure_2_binscatter_change_productivity.pdf}
+		\caption{Worker Goal Achievement Changes by Training Status}
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[t]{.45\textwidth}
+		\includegraphics[width=1\textwidth]{./Figures/Figure_2_binscatter_change_productivity_managers.pdf}
+		\caption{Manager Goal Achievement Changes by Connections to Trained Workers}
+	\end{subfigure}
+	\caption{Goal Achievement in the Pre- and Post-Period for Workers and Bosses}
+	\centering
+\end{figure}
+\footnotesize Note: This figure displays pre-period individual goal achievement and post-period individual goal achievement for frontline workers and bosses. The unit of observation is employee-by-year. The top figure is raw goal achievement for workers,
+whereas the bottom gure is the raw goal achievement for managers. A manager is defined as well-connected if received a larger average number of emails from eventually trained workers in the pre-period than the median manager in her own division.
+
+\newpage
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=1\textwidth]{./Figures/Figure_3_change_emails.pdf}
+		\caption{Changes in share of Emails Sent Within Division Between the Pre- and Post- Period by Sender/Recipient Type}
+\end{figure}
+\footnotesize Note: This figure displays the average change in the share of emails sent at baseline for untrained workers and for trained workers. The figure splits by the sender and recipient type, with recipient type further broken down by wage band (WB1,
+WB2) and training status (T, U). This yields 5 types of recipients and senders: managers, trained wage band 1 and 2 workers, and untrained wage band 1 and 2 workers. The baseline change is computed as the difference in share of emails sent in 2019 and share of emails sent in 2018. The "Trained" change comes from the baseline change plus the coefficient on Treated x Post estimated from a difference-in-differences regression of share of emails, fit by recipient group, with fixed effects for workers and time. Standard errors are clustered at the sender level.
+
+\newpage
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/Figure_4_Survey_Questions.pdf}
+	\caption{Distribution of Survey Responses to Questions Regarding the Mechanism}
+\end{figure}
+\footnotesize Note: This figure displays answers to an ex-post survey designed to understand the environment and mechanisms behind results. From top-bottom and left to right, the questions are as follows: 1. "Remember your work environment in 2018
+and 2019. Consider all the people you used to interact with by e-mail every week. How frequently did you interact withthem face to face? (choose only one option)." 2. "In your opinion, relative to 2018, monitoring from your managers in 2019 increased, decreased, or remained the same?". 3. "Remember your work environment in 2018 and 2019. What was the main reason that you electronically contacted workers from a higher wage band (choose only one option)." 4. "What was the main reason you electronically contacted workers from lower wage bands (choose only one option)."
+\end{comment}
+
+\newpage
+\subsection{Table 1}
+\begin{table}[h!]
+	\begin{center}
+		\scalebox{0.75}{
+			\input{./Tables/Table_1_Descriptive_Statistics.tex}}
+		\caption{Descriptive Statistics}
+	\end{center}
+\end{table}
+\footnotesize Note: 
+
+\newpage
+\subsection{Tables}
+\begin{table}[h!]
+	\begin{center}
+		\scalebox{0.65}{
+			\input{./Tables/Table_2_Panel_Regression_Growth.tex}}
+		\caption{Panel Regression on Economic Growth}
+	\end{center}
+\end{table}
+\footnotesize Note: 
+
+\newpage
+\subsection{Tables}
+\begin{table}[h!]
+	\begin{center}
+		\scalebox{0.65}{
+			\input{./Tables/Table_3_Panel_Regression_Ineq.tex}}
+		\caption{Panel Regression on Inequality}
+	\end{center}
+\end{table}
+\footnotesize Note: 
+
+\newpage
+\subsection{Tables}
+\begin{table}[h!]
+	\begin{center}
+		\scalebox{0.65}{
+			\input{./Tables/Table_4_Panel_Regression_Growth_tax_cut.tex}}
+		\caption{Panel Regression on Economic Growth}
+	\end{center}
+\end{table}
+\footnotesize Note: 
+
+
+\newpage
+\subsection{Tables}
+\begin{table}[h!]
+	\begin{center}
+		\scalebox{0.65}{
+			\input{./Tables/Table_5_Panel_Regression_Growth_tax_inc.tex}}
+		\caption{Panel Regression on Economic Growth}
+	\end{center}
+\end{table}
+\footnotesize Note: 
+
+\newpage
+\subsection{Tables}
+\begin{table}[h!]
+	\begin{center}
+		\scalebox{0.75}{
+			\input{./Tables/Table_6_IV_Regression.tex}}
+		\caption{IV Regression on Economic Growth}
+	\end{center}
+\end{table}
+\footnotesize Note: 
+
+\end{document}

@@ -1,0 +1,252 @@
+%% Output Gap Model (Herrera, F., 2023) 
+
+!transition_variables
+%--------------------
+% Demand
+'GDP (log)'                                 L_GDP,
+'Potential GDP (log)'                       L_GDP_BAR,
+'Output gap'                                L_GDP_GAP,
+'Growth'                                    DL_GDP,
+'Potential Growth'                          DL_GDP_BAR,
+'Monetary Condition Index'                  MCI,
+'World output gap'                          L_GDP_RW_GAP,
+
+% Supply
+'Price level'                               L_CPI,
+'External price level'                      L_CPI_RW,
+'Inflation'                                 DL_CPI,
+'Inflation Target'                          DL_CPI_TAR,
+'Real Marginal Costs'                       RMC,
+'External Inflation'                        DL_CPI_RW,
+
+% Employment
+'Unemployment rate'                         UNR,
+'NAIRU'                                     UNR_BAR,
+'Unemployment gap'                          UNR_GAP,
+
+% Rates
+'Interest rate'                             RS,
+'Neutral nominal interest rate'             RSNEUTRAL,
+'Real interest rate'                        RR,
+'Equilibrium RIR'                           RR_BAR,
+'RIR gap'                                   RR_GAP,
+'Nominal world interest rate'               RS_RW,
+'World real interest rate'                  RR_RW,
+'Equilbrium WRIR'                           RR_RW_BAR,
+'WRIR gap'                                  RR_RW_GAP,
+'Premium risk'                              PREM,
+'Premium risk equilibrium'                  PREM_BAR,
+'Premium risk gap'                          PREM_GAP,
+
+'Nominal exchange rate'                     L_S,
+'Real exchange rate'                        L_Z,
+'Nominal depreciation'                      DL_S,
+'Real depreciation'                         DL_Z,
+'RER equilibrium'                           L_Z_BAR,
+'RER gap'                                   L_Z_GAP,
+'RER depreciation equilibrium'              DL_Z_BAR,
+'RER depreciation gap'                                   DL_Z_GAP,
+
+!transition_shocks
+%-----------------
+
+'Shock to level of potential output' RES_LGDP_BAR,
+'Shock to growth rate of potential output' RES_G,
+'Shock to output gap' SHK_L_GDP_GAP,
+'Shock to inflation' SHK_DL_CPI,
+'Shock to inflation target' SHK_DL_CPI_TAR,
+
+'Shock to unemployment gap' SHK_UNR_GAP,
+'Shock to NAIRU' SHK_UNR_BAR,
+'Shock to growth rate of NAIRU' RES_G_UNR_BAR,
+
+'Shock to NER' SHK_L_S,
+
+'Shock to NIR' SHK_RS,
+
+'Shock to risk premium' SHK_PREM,
+'Shock to equilibrium risk premium' SHK_PREM_BAR,
+
+% External
+'Shock to worlds output gap'   SHK_L_GDP_RW_GAP,
+'Shock to external NIR'         SHK_RS_RW,
+'Shock to equilibrium external RIR'    SHK_RR_RW_BAR
+'Shock to external inflation'    SHK_DL_CPI_RW
+!parameters
+%----------    
+% Steady state values
+growth_ss
+unr_ss
+ss_DL_CPI_TAR
+ss_DL_Z_BAR
+ss_DL_CPI_RW
+ss_PREM_BAR
+ss_RR_RW_BAR
+% Parameters
+% Demand
+a1, a2, a3, a4, a5
+
+% Supply
+b1, b2, b3
+
+% Unemployment
+c1, c2, c3
+
+% Taylor Rule
+d1, d2, d3
+
+beta, lambda, phi, theta,
+tau1, tau2, tau3, tau4, 
+
+% AR proccesses persistence
+rho_DL_CPI_TAR, rho_PREM_BAR, rho_L_GDP_RW_GAP, rho_RS_RW,
+rho_RR_RW_BAR, rho_DL_CPI_RW,
+!transition_equations
+%--------------------
+% Aggregate Demand (IS Curve)
+    'Aggregate demand' 
+    L_GDP_GAP = a1*L_GDP_GAP{1} + a2*L_GDP_GAP{-1} - a3*MCI + a5*L_GDP_RW_GAP + SHK_L_GDP_GAP; 
+
+    'Real monetary condition index'
+    MCI = a4*(RR_GAP + PREM_GAP) + (1-a4)*(-L_Z_GAP);
+    
+% Aggregate Supply (Phillips Curve)    
+    'Core Inflation -- Excl. Food and Energy'
+    DL_CPI =  b1*DL_CPI{-1} + (1-b1)*DL_CPI{1} + b2*RMC + SHK_DL_CPI;
+
+    'Real Marginal Costs -- Core Inflation'
+    RMC = b3*L_GDP_GAP + (1-b3)*(L_Z_GAP);
+
+% Unemployment (Okun's Law)
+    'Dynamic Okun´s Law'
+	UNR_GAP =  c1*UNR_GAP{-1} + c2*L_GDP_GAP + SHK_UNR_GAP;
+
+% UIP Condition
+
+    'Uncovered Interest Rate Parity (UIP)'
+    L_S = L_S{+1} - RS + RS_RW + PREM + SHK_L_S;
+
+% Monetary policy
+    'Monetary policy reaction function'
+    RS = d1*RS{-1} + (1-d1)*(RSNEUTRAL + d2*(DL_CPI{+1} - DL_CPI_TAR) ...
+     + d3*L_GDP_GAP) + SHK_RS;  
+    
+    'Target inflation AR process'
+    DL_CPI_TAR = rho_DL_CPI_TAR*DL_CPI_TAR{-1} + (1-rho_DL_CPI_TAR)*ss_DL_CPI_TAR + SHK_DL_CPI_TAR;    
+
+% Equilibrium
+	'Stochastic process for NAIRU'
+	UNR_BAR =  (1-c3)*UNR_BAR{-1} + c3*unr_ss + SHK_UNR_BAR;
+
+% Premium
+    'Premium Gap Definition'
+    PREM_GAP = PREM - PREM_BAR;
+
+    'Premium'
+    PREM = RR_BAR - RR_RW_BAR - DL_Z_BAR{+1} + SHK_PREM;
+
+    'Real Rate Trend'
+    RR_BAR        = RR_RW_BAR + PREM_BAR + ss_DL_Z_BAR;
+
+    'Premium Trend'
+    PREM_BAR      = rho_PREM_BAR*PREM_BAR{-1} + (1-rho_PREM_BAR)*ss_PREM_BAR + SHK_PREM_BAR;
+
+% Definitions
+    'Inflations/Growth Rates'
+    DL_CPI      = L_CPI - L_CPI{-1};
+    DL_S        = L_S - L_S{-1};
+    DL_GDP      = L_GDP - L_GDP{-1};
+    DL_GDP_BAR  = L_GDP_BAR - L_GDP_BAR{-1};
+    DL_Z 		= L_Z - L_Z{-1};
+
+    'Definitions/Identities'
+    RSNEUTRAL     = RR_BAR + DL_CPI{+1};
+    RR            = RS - DL_CPI{+1}; 
+    RR_GAP        = RR - RR_BAR;
+    L_Z           = L_S + L_CPI_RW - L_CPI;
+    L_Z_GAP       = L_Z - L_Z_BAR;
+    L_GDP_GAP     = L_GDP - L_GDP_BAR;
+
+	'NAIRU definition'
+	UNR_BAR = UNR + UNR_GAP;
+
+    'External Block'
+    L_GDP_RW_GAP  = rho_L_GDP_RW_GAP*L_GDP_RW_GAP{-1} + SHK_L_GDP_RW_GAP;
+    RS_RW         = rho_RS_RW*RS_RW{-1} + (1-rho_RS_RW)*(RR_RW_BAR + DL_CPI_RW) + SHK_RS_RW;
+    RR_RW         = RS_RW - DL_CPI_RW;  
+    RR_RW_BAR     = rho_RR_RW_BAR*RR_RW_BAR{-1} + (1-rho_RR_RW_BAR)*ss_RR_RW_BAR + SHK_RR_RW_BAR;
+    RR_RW_GAP     = RR_RW - RR_RW_BAR;
+    DL_CPI_RW     = rho_DL_CPI_RW*DL_CPI_RW{-1} + (1-rho_DL_CPI_RW)*ss_DL_CPI_RW + SHK_DL_CPI_RW;
+    L_CPI_RW      = L_CPI_RW{-1} + DL_CPI_RW;
+
+    'Country list variables'
+    growth_ss =
+%     unr_ss
+% ss_DL_CPI_TAR
+% ss_DL_Z_BAR
+% ss_DL_CPI_RW
+% ss_PREM_BAR
+% ss_RR_RW_BAR
+    !for
+        ?cc = $[ext_cc_list]$
+    !do
+        + ?cc_growth_ss
+    !end
+    ;
+    ext_cc_list = {'COL','MEX'}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!if filter == true
+
+!measurement_variables
+    % External variables
+        OBS_L_GDP_RW_GAP,
+%         OBS_L_GDP_RW,
+        OBS_L_CPI_RW, 
+        OBS_RS_RW,
+%         OBS_RR_RW,
+        OBS_RR_RW_BAR, 
+
+    % Domestic variables
+        OBS_L_GDP,
+        OBS_L_GDP_GAP, 
+%         OBS_DL_GDP_BAR,
+        OBS_L_S, 
+%         OBS_PREM,  
+        OBS_L_CPI,
+        OBS_RS, OBS_DL_CPI_TAR,
+%         OBS_PREM_BAR, 
+%         OBS_L_Z_GAP
+        OBS_UNR
+!measurement_equations
+    % Foreign variables
+%         OBS_L_GDP_RW_GAP = L_GDP_RW_GAP; 
+% %         OBS_L_GDP_RW     = L_GDP_RW;
+        OBS_L_CPI_RW     = L_CPI_RW;
+        OBS_RS_RW        = RS_RW;
+%         OBS_RR_RW        = RR_RW;
+        OBS_RR_RW_BAR    = RR_RW_BAR;
+        OBS_L_RWFOOD     = L_RWFOOD;
+        OBS_L_RWFOOD_BAR = L_RWFOOD_BAR;
+        OBS_L_RWOIL      = L_RWOIL;
+        OBS_L_RWOIL_GAP  = L_RWOIL_GAP;
+%         OBS_PREM_BAR     = PREM_BAR;
+%         OBS_PREM         = PREM;
+        OBS_UNR = UNR;
+        
+    % Domestic variables
+        % Levels 
+        OBS_L_GDP        = L_GDP;
+        OBS_L_GDP_GAP    = L_GDP_GAP;
+%         OBS_DL_GDP_BAR  = DLA_GDP_BAR;
+        OBS_L_CPI        = L_CPI;
+        OBS_DL_CPI_TAR   = DL_CPI_TAR;
+        OBS_RS           = RS;
+        OBS_L_S          = L_S;
+        OBS_UNR          = UNR;
+
+!else
+!end
+
+
+!measurement_variables
+%---------------------

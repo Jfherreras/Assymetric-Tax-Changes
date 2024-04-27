@@ -1,0 +1,19 @@
+\begin{tabular}{lccccc} \\ \hline
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+ & \multicolumn{3}{c}{Growth} &\multicolumn{1}{c}{Inequality} \\ \cline{2-4} & OLS &  \multicolumn{1}{c}{Reduced form} & \multicolumn{1}{c}{IV}& \multicolumn{1}{c}{First Stage} \\ \hline & & & & & &  \\
+Gini                &     -0.0709         &                     &     -0.0112         &                     \\
+                    &     (0.132)         &                     &     (0.697)         &                     \\
+\addlinespace
+Corporate Income Tax&                     &     0.00130         &                     &      -0.116\sym{***}\\
+                    &                     &    (0.0807)         &                     &    (0.0361)         \\
+\arrayrulecolor{black!10}\midrule
+Observations        &         442         &         442         &         442         &         442         \\
+R-squared           &       0.585         &       0.585         &       0.000         &       0.916         \\
+Adjusted R-squared  &       0.534         &       0.533         &      -0.049         &       0.906         \\
+Estimation          &         OLS         &         OLS         &          IV         &         OLS         \\
+Country F.E         &$\checkmark$         &$\checkmark$         &$\checkmark$         &$\checkmark$         \\
+Year F.E.           &$\checkmark$         &    $\times$         &    $\times$         &    $\times$         \\
+Instrument          &           -         &           -         &        CITR         &           -         \\
+Kleibergen-Paap F   &                     &                     &           -         &      10.256         \\
+\arrayrulecolor{black}\bottomrule
+\end{tabular}

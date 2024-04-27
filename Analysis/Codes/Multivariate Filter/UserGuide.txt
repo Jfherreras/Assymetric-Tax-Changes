@@ -1,0 +1,114 @@
+User Guide for the Multivariate Filter for Potential Output
+Model version: MVF_wp1579
+
+Economic Modeling Division, Research Department, IMF 
+
+Contacts: 
+Patrick Blagrave, Roberto Garcia-Saltos, Douglas Laxton and Fan Zhang
+
+More details are available in the IMF Working Paper
+"Blagrave, P. and others. A Simple Multivariate Filter for Estimating Potential Output, 79/2015"
+http://www.imf.org/external/pubs/ft/wp/2015/wp1579.pdf
+
+System Requirements 
+This system is tested compatible with IRIS Toolbox version
+IRIS_Tbx_20130523, and MATLAB 2012a/b. 
+
+The package contains several m files that are described below. The script Driver.m integrates all steps together. To make specifications for each step, specify the parameters as described below.
+
+Step 0. Software initialization
+
+Please copy the location of your IRIS Toolbox folder to the line in
+file addMyPath.m and run the script. This script needs to be run only once per MATLAB session.
+
+Step 1. readDefinitions.m
+
+countrycode [string]: three-letter country code used to identify the country.
+
+startyear [year format in IRIS]: the year to start the filter, eg. yy(year).
+
+startest [year format in IRIS]: the year for the start of sample used for Bayesian estimation.
+
+endyear [year format in IRIS]: the year for the end of the sample for both estimation and filtration.
+
+endhist [year format in IRIS]: the year indicating the end of historical data.
+
+modfile [string]: name of the model file.
+
+P [struct]: Specify all the parameters in the model.
+			If the parameters are included in the prior distributions section, the posteriors will overwrite the parameters specified here.
+			The standard deviations of the consensus forecasts will be estimated as RMSEs once the readdata.m script is executed.
+			For detailed choices on values / ratios for the parameters, please refer to the working paper.
+
+E [struct]: Specify prior distributions for parameters. These priors will be used by the file estimateModel.m, described in step 4, below.
+			The structure of the prior specification is:
+			E.param={initial value (usually same as prior mean),lower bound,upper bound,logdist.normal(prior mean,prior standard deviation)}
+			
+datafile [string]: the name of database in csv format.
+			The database should include: historical and expert forcasts, and judgment variables if applicable. The historical and forecast data is be identified using the 'endhist' date provided above.
+
+judgment [0 or 1]: 0 ~ no judgment; 1 ~ judgment on unobservables to be applied (potential growth,output gap or NAIRU) and be provided in the *.csv database.
+
+Caveat: To avoid overdetermination, when entering potential growth and output gap for more than one year, AVOID entering both potential growth and output gap for any 2 consecutive years.
+For example, if tuning potential growth and output gap for 2014 and 2015, it is OK to specify:
+
+* potential growth for 2014 and 2015, and output gap for 2014;
+
+* potential growth for 2014 and 2014, and output gap for 2015;
+
+* potential growth for 2014, and output gap for 2014 and 2015;
+
+* potential growth for 2015, and output gap for 2014 and 2015;
+
+BUT NOT: 
+
+* potential growth for 2014 and 2015, and output gap for 2014 and 2015.
+
+Step 2. readModel
+The model file is called MVF_wp1579.model. Please see IRIS manual and tutorials for an explanation of the *.model file.
+
+Step 3. readdata.m
+Script will load the data described below.
+Note:
+1) Definitions are already included in the comment line in the *.csv database file. All units are in percentage points except LGDP.
+2) In case a particular variable is not available or of poor quality, please keep it, but fill the values with NaN.
+3) In case a some particular forecasts are not not available, or can only be provided intermittently, just fill the missing values with NaN.
+
+PIE_			CPI inflation
+PIE_CONS1_		1 yr ahead consensus inflation
+LGDP_			100 * ln of real GDP
+GROWTH_			real GDP growth
+GROWTH_CONS1_	1 yr ahead consensus GDP growth
+GROWTH_CONS2_	2 yr ahead consensus GDP growth
+GROWTH_CONS3_	3 yr ahead consensus GDP growth
+GROWTH_CONS4_	4 yr ahead consensus GDP growth
+GROWTH_CONS5_	5 yr ahead consensus GDP growth
+UNR_			unemployment rate
+GROWTH_BAR_		judgment on potential growth
+UNR_BAR_		judgment on NAIRU
+Y_				judgment on output gap
+
+
+
+Step 4. estimateModel.m
+The script read priors from step 1, and estimate parameters using bayesian methods as described in IRIS manual. The estimated parameters are saved as model object "mest". 
+
+Step 5. filterModel.m
+Using etimated parameters, this script applies Kalman smoother to obtain estimates for the unobservable variables.
+Note that Step 4 is not required when the filtration uses the parameters defined in the structure P in step 1. In this case, the model object to use is "m" instead of "mest".																																													  
+
+Step 6. saveResult.m
+Output for all variables of the model are saved in the filtModel_date.csv file, under the country folder.
+
+
+
+
+
+
+
+
+
+
+
+
+
