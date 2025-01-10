@@ -15,7 +15,7 @@ library(rlang)
 library(haven)
 
 # Load data
-Panel <- read_dta("G:/Mi unidad/1 Drive Escritorio/Investigaciones/Assymetric impacts of income taxation/Analysis/Output/Datasets/Panel.dta")
+Panel <- read_dta("C:/Users/juanf/OneDrive/Documentos/GitHub/Assymetric-Tax-Changes/Analysis/Output/Datasets/Panel.dta")
 
 # 21: Country
 # 2: Year
@@ -103,7 +103,7 @@ plot(results_panel_SF)
 # 
 # 
 
-####### Results considering inequity
+####### Results considering inequality
 # Smoothing Function
 # Panel<-na.omit(Panel)
 # (4/25) Tax -> (30/31/32/33)Profit -> (20/21/22)Wages -> (10/11/12) Inequity -> (23) growth | GAP
@@ -117,6 +117,7 @@ gini_med = gini_quarters[3]
 gini_25 = gini_quarters[2]
 
 endog_data$dummy= ifelse(endog_data$gini>gini_med,1,0)
+endog_data$dummy_75= ifelse(endog_data$gini>gini_75,1,0)
 endog_data$dummy2 = endog_data$dummy*Panel$pos_gap
 endog_data$dummy3 = endog_data$dummy*Panel$neg_gap
 endog_data = endog_data[is.na(endog_data$gini)==0,]
@@ -129,7 +130,7 @@ results_panel_SF <-  lp_nl_panel(data_set = endog_data,
                                  panel_model = "within", panel_effect = "twoways",
                                  robust_cov = "vcovSCC", 
                                  c_exog_data = c("wages_lc","profit_rate1","unemploymentrate"),
-                                 switching = "gini",
+                                 switching = "dummy",
                                  # lag_switching     = TRUE,      use_hp         = TRUE,
                                  # lambda            = 6.25,      
                                  gamma          = 10,

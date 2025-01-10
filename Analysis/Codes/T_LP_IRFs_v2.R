@@ -15,7 +15,7 @@ library(rlang)
 library(haven)
 
 # Load data
-Panel <- read_dta("G:/Mi unidad/1 Drive Escritorio/Investigaciones/Assymetric impacts of income taxation/Analysis/Output/Datasets/Panel.dta")
+Panel <- read_dta("C:/Users/juanf/OneDrive/Documentos/GitHub/Assymetric-Tax-Changes/Analysis/Output/Datasets/Panel.dta")
 
 # 21: Country
 # 2: Year
